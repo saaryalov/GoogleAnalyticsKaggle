@@ -23,3 +23,20 @@ def sort_by_rev(df,col,kind = "mean"):
     #sum_rev = sum(result["totals.transactionRevenue"]>thresh)
     return result
 
+
+# The goal of this function is to manually OHE features 
+def manual_ohe(col,level,name=None):
+    # col (str) = column you want to study
+    # level (str):= a string if you want to one hot encode by string 
+    # level (list):= if a list, will check if values in list 
+    # name := if level is a list, must provide a name for the new featuer to create 
+    assert isinstance(col,str)
+    if isinstance(level,str):
+        level = level.replace(" ","_")
+        train[col+"__"+level] = train[col].map(lambda x: (x == level)*1)
+        test[col+"__"+level] = test[col].map(lambda x: (x == level)*1)
+    elif isinstance(level,list):
+        train[col+"__"+name] = train[col].map(lambda x: (x in level)*1)
+        test[col+"__"+name] = train[col].map(lambda x: (x in level)*1)
+    else:
+        print("ERROR!")

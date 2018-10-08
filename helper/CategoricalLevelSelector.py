@@ -48,8 +48,10 @@ class CategoricalLevelSelection(object):
     def __map_levels(self,df,column,change_to):
         series = df[column]
         levels = series.unique().tolist()
-        levels_to_change = np.setdiff1d(levels,self.levels_to_keep[column]).tolist()
-        series.replace(levels_to_change, change_to,inplace=True)
+        new_levels = self.levels_to_keep[column]
+        if len(levels) >  len(new_levels):
+            levels_to_change = np.setdiff1d(levels,new_levels).tolist()
+            series.replace(levels_to_change, change_to,inplace=True)
         return None
 
     def fit(self, data,thresh=0.05, columns=None, key=None, cols_to_ignore=None,verbose=False):
